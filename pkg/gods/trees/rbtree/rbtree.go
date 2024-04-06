@@ -1,3 +1,4 @@
+//nolint:gocognit,gocritic,nestif // it's a tree implementation
 package rbtree
 
 // Node of the rbtree has a pointer of the node of parent, left, right, also has own color and Item which client uses
