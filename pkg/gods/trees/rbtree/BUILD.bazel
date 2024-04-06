@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "operations.go",
         "rbtree.go",
+        "util.go",
     ],
     importpath = "github.com/blackhorseya/assessment-bito/pkg/gods/trees/rbtree",
     visibility = ["//visibility:public"],

@@ -7,12 +7,30 @@ func (t *RBTree) Len() uint {
 
 // Insert adds an item to the tree.
 func (t *RBTree) Insert(item Item) {
-	// todo: 2024/4/6|sean|implement me
-	panic("implement me")
+	if item == nil {
+		return
+	}
+
+	t.insert(&Node{
+		Left:   t.NIL,
+		Right:  t.NIL,
+		Parent: t.NIL,
+		Color:  RED,
+		Item:   item,
+	})
 }
 
 // Delete removes an item from the tree.
 func (t *RBTree) Delete(item Item) Item {
-	// todo: 2024/4/6|sean|implement me
-	panic("implement me")
+	if item == nil {
+		return nil
+	}
+
+	return t.delete(&Node{
+		Left:   t.NIL,
+		Right:  t.NIL,
+		Parent: t.NIL,
+		Color:  RED,
+		Item:   item,
+	}).Item
 }

@@ -1,48 +1,124 @@
 package rbtree
 
-// Item is the interface that the tree will use to store items.
-type Item interface {
-	Less(than Item) bool
-}
-
-const (
-	RED   = false
-	BLACK = true
-)
-
-// Node is a single element within the tree.
+// Node of the rbtree has a pointer of the node of parent, left, right, also has own color and Item which client uses
 type Node struct {
 	Left   *Node
 	Right  *Node
 	Parent *Node
-	Color  bool
+	Color  uint
 
+	// for use by client.
 	Item
 }
 
-// RBTree is a red-black tree.
-type RBTree struct {
-	NIL *Node
+const (
+	// RED represents the color of the node is red
+	RED = 0
+	// BLACK represents the color of the node is black
+	BLACK = 1
+)
 
+// Item has a method to compare items which is less
+type Item interface {
+	Less(than Item) bool
+}
+
+// RBTree represents a Red-Black tree.
+type RBTree struct {
+	NIL   *Node
 	root  *Node
 	count uint
 }
 
-// New returns an initialized red-black tree.
+func less(x, y Item) bool {
+	return x.Less(y)
+}
+
+// New returns an initialized Red-Black tree
 func New() *RBTree {
-	node := &Node{
-		Left:   nil,
-		Right:  nil,
-		Parent: nil,
-		Color:  true,
-		Item:   nil,
-	}
+	node := &Node{nil, nil, nil, BLACK, nil}
 
 	return &RBTree{
 		NIL:   node,
 		root:  node,
 		count: 0,
 	}
+}
+
+func (t *RBTree) leftRotate(x *Node) {
+	// Since we are doing the left rotation, the right child should *NOT* nil.
+	if x.Right == t.NIL {
+		return
+	}
+
+	//
+	// The illation of left rotation
+	//
+	//          |                                  |
+	//          X                                  Y
+	//         / \         left rotate            / \
+	//        α  Y       ------------->         X   γ
+	//           / \                            / \
+	//          β  γ                         α  β
+	//
+	// It should be note that during the rotating we do not change
+	// the Nodes' color.
+	//
+	y := x.Right
+	x.Right = y.Left
+	if y.Left != t.NIL {
+		y.Left.Parent = x
+	}
+	y.Parent = x.Parent
+
+	if x.Parent == t.NIL {
+		t.root = y
+	} else if x == x.Parent.Left {
+		x.Parent.Left = y
+	} else {
+		x.Parent.Right = y
+	}
+
+	y.Left = x
+	x.Parent = y
+}
+
+func (t *RBTree) rightRotate(x *Node) {
+	// Since we are doing the right rotation, the left child should *NOT* nil.
+	if x.Left == t.NIL {
+		return
+	}
+
+	//
+	// The illation of right rotation
+	//
+	//          |                                  |
+	//          X                                  Y
+	//         / \         right rotate           / \
+	//        Y   γ      ------------->         α  X
+	//       / \                                    / \
+	//      α  β                                 β  γ
+	//
+	// It should be note that during the rotating we do not change
+	// the Nodes' color.
+	//
+	y := x.Left
+	x.Left = y.Right
+	if y.Right != t.NIL {
+		y.Right.Parent = x
+	}
+	y.Parent = x.Parent
+
+	if x.Parent == t.NIL {
+		t.root = y
+	} else if x == x.Parent.Left {
+		x.Parent.Left = y
+	} else {
+		x.Parent.Right = y
+	}
+
+	y.Right = x
+	x.Parent = y
 }
 
 func (t *RBTree) insert(z *Node) *Node {
@@ -161,80 +237,66 @@ func (t *RBTree) insertFixup(z *Node) {
 	t.root.Color = BLACK
 }
 
-func (t *RBTree) leftRotate(x *Node) {
-	// Since we are doing the left rotation, the right child should *NOT* nil.
-	if x.Right == t.NIL {
-		return
+// Just traverse the node from root to left recursively until left is NIL.
+// The node whose left is NIL is the node with minimum value.
+func (t *RBTree) min(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
 	}
 
-	//
-	// The illation of left rotation
-	//
-	//          |                                  |
-	//          X                                  Y
-	//         / \         left rotate            / \
-	//        α  Y       ------------->         X   γ
-	//           / \                            / \
-	//          β  γ                         α  β
-	//
-	// It should be note that during the rotating we do not change
-	// the Nodes' color.
-	//
-	y := x.Right
-	x.Right = y.Left
-	if y.Left != t.NIL {
-		y.Left.Parent = x
-	}
-	y.Parent = x.Parent
-
-	if x.Parent == t.NIL {
-		t.root = y
-	} else if x == x.Parent.Left {
-		x.Parent.Left = y
-	} else {
-		x.Parent.Right = y
+	for x.Left != t.NIL {
+		x = x.Left
 	}
 
-	y.Left = x
-	x.Parent = y
+	return x
 }
 
-func (t *RBTree) rightRotate(x *Node) {
-	// Since we are doing the right rotation, the left child should *NOT* nil.
-	if x.Left == t.NIL {
-		return
+// Just traverse the node from root to right recursively until right is NIL.
+// The node whose right is NIL is the node with maximum value.
+func (t *RBTree) max(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
 	}
 
-	//
-	// The illation of right rotation
-	//
-	//          |                                  |
-	//          X                                  Y
-	//         / \         right rotate           / \
-	//        Y   γ      ------------->         α  X
-	//       / \                                    / \
-	//      α  β                                 β  γ
-	//
-	// It should be note that during the rotating we do not change
-	// the Nodes' color.
-	//
-	y := x.Left
-	x.Left = y.Right
-	if y.Right != t.NIL {
-		y.Right.Parent = x
-	}
-	y.Parent = x.Parent
-
-	if x.Parent == t.NIL {
-		t.root = y
-	} else if x == x.Parent.Left {
-		x.Parent.Left = y
-	} else {
-		x.Parent.Right = y
+	for x.Right != t.NIL {
+		x = x.Right
 	}
 
-	y.Right = x
-	x.Parent = y
+	return x
+}
+
+func (t *RBTree) search(x *Node) *Node {
+	p := t.root
+
+	for p != t.NIL {
+		if less(p.Item, x.Item) {
+			p = p.Right
+		} else if less(x.Item, p.Item) {
+			p = p.Left
+		} else {
+			break
+		}
+	}
+
+	return p
+}
+
+func (t *RBTree) successor(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
+	}
+
+	// Get the minimum from the right sub-tree if it existed.
+	if x.Right != t.NIL {
+		return t.min(x.Right)
+	}
+
+	y := x.Parent
+	for y != t.NIL && x == y.Right {
+		x = y
+		y = y.Parent
+	}
+	return y
 }
 
 func (t *RBTree) delete(key *Node) *Node {
@@ -285,22 +347,6 @@ func (t *RBTree) delete(key *Node) *Node {
 	t.count--
 
 	return ret
-}
-
-func (t *RBTree) search(x *Node) *Node {
-	p := t.root
-
-	for p != t.NIL {
-		if less(p.Item, x.Item) {
-			p = p.Right
-		} else if less(x.Item, p.Item) {
-			p = p.Left
-		} else {
-			break
-		}
-	}
-
-	return p
 }
 
 func (t *RBTree) deleteFixup(x *Node) {
@@ -357,50 +403,4 @@ func (t *RBTree) deleteFixup(x *Node) {
 		}
 	}
 	x.Color = BLACK
-}
-
-func (t *RBTree) successor(x *Node) *Node {
-	if x == t.NIL {
-		return t.NIL
-	}
-
-	// Get the minimum from the right sub-tree if it existed.
-	if x.Right != t.NIL {
-		return t.min(x.Right)
-	}
-
-	y := x.Parent
-	for y != t.NIL && x == y.Right {
-		x = y
-		y = y.Parent
-	}
-	return y
-}
-
-func (t *RBTree) min(x *Node) *Node {
-	if x == t.NIL {
-		return t.NIL
-	}
-
-	for x.Left != t.NIL {
-		x = x.Left
-	}
-
-	return x
-}
-
-func (t *RBTree) max(x *Node) *Node {
-	if x == t.NIL {
-		return t.NIL
-	}
-
-	for x.Right != t.NIL {
-		x = x.Right
-	}
-
-	return x
-}
-
-func less(a, b Item) bool {
-	return a.Less(b)
 }
