@@ -21,7 +21,10 @@ go_library(
 
 go_test(
     name = "player_test",
-    srcs = ["memory_test.go"],
+    srcs = [
+        "memory_test.go",
+        "rbtree_test.go",
+    ],
     embed = [":player"],
     deps = [
         "//entity/domain/match/agg",
