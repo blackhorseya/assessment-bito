@@ -12,21 +12,21 @@ import (
 	"go.uber.org/zap"
 )
 
-type suiteTester struct {
+type suiteMemory struct {
 	suite.Suite
 
 	repo repo.IPlayerRepo
 }
 
-func (s *suiteTester) SetupTest() {
+func (s *suiteMemory) SetupTest() {
 	s.repo = NewPlayerRepoWithMemory()
 }
 
-func TestAll(t *testing.T) {
-	suite.Run(t, new(suiteTester))
+func TestMemory(t *testing.T) {
+	suite.Run(t, new(suiteMemory))
 }
 
-func (s *suiteTester) Test_memory_GetByID() {
+func (s *suiteMemory) Test_memory_GetByID() {
 	player1, err := agg.NewPlayer("player1", 180, model.GenderMale, 20, 3)
 	s.Require().NoError(err)
 
@@ -67,7 +67,7 @@ func (s *suiteTester) Test_memory_GetByID() {
 	}
 }
 
-func (s *suiteTester) Test_memory_JoinPlayer() {
+func (s *suiteMemory) Test_memory_JoinPlayer() {
 	player1, err := agg.NewPlayer("player1", 180, model.GenderMale, 20, 3)
 	s.Require().NoError(err)
 
@@ -101,7 +101,7 @@ func (s *suiteTester) Test_memory_JoinPlayer() {
 	}
 }
 
-func (s *suiteTester) Test_memory_LeavePlayer() {
+func (s *suiteMemory) Test_memory_LeavePlayer() {
 	player1, err := agg.NewPlayer("player1", 180, model.GenderMale, 20, 3)
 	s.Require().NoError(err)
 
@@ -135,7 +135,7 @@ func (s *suiteTester) Test_memory_LeavePlayer() {
 	}
 }
 
-func (s *suiteTester) Test_memory_ListPlayers() {
+func (s *suiteMemory) Test_memory_ListPlayers() {
 	player1, _ := agg.NewPlayer("player1", 180, model.GenderMale, 20, 3)
 	player2, _ := agg.NewPlayer("player2", 170, model.GenderFemale, 19, 2)
 	player3, _ := agg.NewPlayer("player3", 160, model.GenderMale, 18, 1)
