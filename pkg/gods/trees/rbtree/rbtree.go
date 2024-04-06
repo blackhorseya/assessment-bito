@@ -12,12 +12,12 @@ const (
 
 // Node is a single element within the tree.
 type Node struct {
-	Item
-
 	Left   *Node
 	Right  *Node
 	Parent *Node
 	Color  bool
+
+	Item
 }
 
 // RBTree is a red-black tree.
@@ -31,11 +31,11 @@ type RBTree struct {
 // New returns an initialized red-black tree.
 func New() *RBTree {
 	node := &Node{
-		Item:   nil,
 		Left:   nil,
 		Right:  nil,
 		Parent: nil,
 		Color:  true,
+		Item:   nil,
 	}
 
 	return &RBTree{
@@ -235,6 +235,170 @@ func (t *RBTree) rightRotate(x *Node) {
 
 	y.Right = x
 	x.Parent = y
+}
+
+func (t *RBTree) delete(key *Node) *Node {
+	z := t.search(key)
+
+	if z == t.NIL {
+		return t.NIL
+	}
+	ret := &Node{t.NIL, t.NIL, t.NIL, z.Color, z.Item}
+
+	var y *Node
+	var x *Node
+
+	if z.Left == t.NIL || z.Right == t.NIL {
+		y = z
+	} else {
+		y = t.successor(z)
+	}
+
+	if y.Left != t.NIL {
+		x = y.Left
+	} else {
+		x = y.Right
+	}
+
+	// Even if x is NIL, we do the assign. In that case all the NIL nodes will
+	// change from {nil, nil, nil, BLACK, nil} to {nil, nil, ADDR, BLACK, nil},
+	// but do not worry about that because it will not affect the compare
+	// between Node-X with Node-NIL
+	x.Parent = y.Parent
+
+	if y.Parent == t.NIL {
+		t.root = x
+	} else if y == y.Parent.Left {
+		y.Parent.Left = x
+	} else {
+		y.Parent.Right = x
+	}
+
+	if y != z {
+		z.Item = y.Item
+	}
+
+	if y.Color == BLACK {
+		t.deleteFixup(x)
+	}
+
+	t.count--
+
+	return ret
+}
+
+func (t *RBTree) search(x *Node) *Node {
+	p := t.root
+
+	for p != t.NIL {
+		if less(p.Item, x.Item) {
+			p = p.Right
+		} else if less(x.Item, p.Item) {
+			p = p.Left
+		} else {
+			break
+		}
+	}
+
+	return p
+}
+
+func (t *RBTree) deleteFixup(x *Node) {
+	for x != t.root && x.Color == BLACK {
+		if x == x.Parent.Left {
+			w := x.Parent.Right
+			if w.Color == RED {
+				w.Color = BLACK
+				x.Parent.Color = RED
+				t.leftRotate(x.Parent)
+				w = x.Parent.Right
+			}
+			if w.Left.Color == BLACK && w.Right.Color == BLACK {
+				w.Color = RED
+				x = x.Parent
+			} else {
+				if w.Right.Color == BLACK {
+					w.Left.Color = BLACK
+					w.Color = RED
+					t.rightRotate(w)
+					w = x.Parent.Right
+				}
+				w.Color = x.Parent.Color
+				x.Parent.Color = BLACK
+				w.Right.Color = BLACK
+				t.leftRotate(x.Parent)
+				// this is to exit while loop
+				x = t.root
+			}
+		} else { // the code below is has left and right switched from above
+			w := x.Parent.Left
+			if w.Color == RED {
+				w.Color = BLACK
+				x.Parent.Color = RED
+				t.rightRotate(x.Parent)
+				w = x.Parent.Left
+			}
+			if w.Left.Color == BLACK && w.Right.Color == BLACK {
+				w.Color = RED
+				x = x.Parent
+			} else {
+				if w.Left.Color == BLACK {
+					w.Right.Color = BLACK
+					w.Color = RED
+					t.leftRotate(w)
+					w = x.Parent.Left
+				}
+				w.Color = x.Parent.Color
+				x.Parent.Color = BLACK
+				w.Left.Color = BLACK
+				t.rightRotate(x.Parent)
+				x = t.root
+			}
+		}
+	}
+	x.Color = BLACK
+}
+
+func (t *RBTree) successor(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
+	}
+
+	// Get the minimum from the right sub-tree if it existed.
+	if x.Right != t.NIL {
+		return t.min(x.Right)
+	}
+
+	y := x.Parent
+	for y != t.NIL && x == y.Right {
+		x = y
+		y = y.Parent
+	}
+	return y
+}
+
+func (t *RBTree) min(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
+	}
+
+	for x.Left != t.NIL {
+		x = x.Left
+	}
+
+	return x
+}
+
+func (t *RBTree) max(x *Node) *Node {
+	if x == t.NIL {
+		return t.NIL
+	}
+
+	for x.Right != t.NIL {
+		x = x.Right
+	}
+
+	return x
 }
 
 func less(a, b Item) bool {
