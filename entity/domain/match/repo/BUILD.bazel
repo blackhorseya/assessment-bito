@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "mock_player.go",
+        "player.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/entity/domain/match/repo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/match/agg",
+        "//entity/domain/match/model",
+        "//pkg/contextx",
+        "@org_uber_go_mock//gomock",
+    ],
+)

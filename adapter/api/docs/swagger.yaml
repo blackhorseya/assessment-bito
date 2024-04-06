@@ -1,0 +1,283 @@
+basePath: /api
+definitions:
+  agg.Player:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      nums_of_wanted_dates:
+        type: integer
+      pairs:
+        items:
+          $ref: '#/definitions/model.Pair'
+        type: array
+      profile:
+        $ref: '#/definitions/model.Profile'
+      updated_at:
+        type: string
+    type: object
+  model.Gender:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - GenderMale
+    - GenderFemale
+    - GenderOther
+  model.Pair:
+    properties:
+      id:
+        type: string
+      left:
+        $ref: '#/definitions/model.User'
+      right:
+        $ref: '#/definitions/model.User'
+    type: object
+  model.Profile:
+    properties:
+      age:
+        type: integer
+      gender:
+        $ref: '#/definitions/model.Gender'
+      height:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.User:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      profile:
+        $ref: '#/definitions/model.Profile'
+      updated_at:
+        type: string
+    type: object
+  pairs.CreatePairPayload:
+    properties:
+      left_id:
+        type: string
+      right_id:
+        type: string
+    type: object
+  players.AddPlayerAndMatchPayload:
+    properties:
+      age:
+        type: integer
+      gender:
+        $ref: '#/definitions/model.Gender'
+      height:
+        type: integer
+      name:
+        type: string
+      nums_of_wanted_dates:
+        type: integer
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact:
+    email: blackhorseya@gmail.com
+    name: Sean Zheng
+    url: https://blog.seancheng.space
+  description: Bito api swagger
+  title: Bito API
+  version: 0.1.0
+paths:
+  /v1/pairs:
+    post:
+      consumes:
+      - application/json
+      description: Create pair
+      parameters:
+      - description: pair
+        in: body
+        name: pair
+        required: true
+        schema:
+          $ref: '#/definitions/pairs.CreatePairPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Pair'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create pair
+      tags:
+      - pairs
+  /v1/players:
+    get:
+      consumes:
+      - application/json
+      description: List players
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            X-Total-Count:
+              description: total player count
+              type: string
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/agg.Player'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: List players
+      tags:
+      - players
+    post:
+      consumes:
+      - application/json
+      description: add player and match.
+      parameters:
+      - description: player
+        in: body
+        name: player
+        required: true
+        schema:
+          $ref: '#/definitions/players.AddPlayerAndMatchPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/agg.Player'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Add player and match.
+      tags:
+      - players
+  /v1/players/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove single person
+      parameters:
+      - description: player id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Remove single person
+      tags:
+      - players
+    get:
+      consumes:
+      - application/json
+      description: Query single people
+      parameters:
+      - description: player id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: 10
+        in: query
+        maximum: 100
+        minimum: 1
+        name: "n"
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/agg.Player'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Query single people
+      tags:
+      - players
+swagger: "2.0"

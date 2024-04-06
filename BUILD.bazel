@@ -1,0 +1,10 @@
+load("@gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/blackhorseya/assessment-bito
+# gazelle:proto disable_global
+gazelle(
+    name = "gazelle",
+    build_tags = [
+        "integration",  # Include tests with the "integration" tag
+    ],
+)

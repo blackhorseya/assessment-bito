@@ -1,0 +1,33 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "player",
+    srcs = [
+        "memory.go",
+        "model.go",
+        "rbtree.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/app/domain/match/repo/player",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/match/agg",
+        "//entity/domain/match/model",
+        "//entity/domain/match/repo",
+        "//pkg/contextx",
+        "@com_github_google_uuid//:uuid",
+    ],
+)
+
+go_test(
+    name = "player_test",
+    srcs = ["memory_test.go"],
+    embed = [":player"],
+    deps = [
+        "//entity/domain/match/agg",
+        "//entity/domain/match/model",
+        "//entity/domain/match/repo",
+        "//pkg/contextx",
+        "@com_github_stretchr_testify//suite",
+        "@org_uber_go_zap//:zap",
+    ],
+)

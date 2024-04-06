@@ -1,0 +1,17 @@
+{
+  "name": "assessment-bito",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blackhorseya/assessment-bito.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/k6": "^0.50.0",
+    "k6": "^0.0.0"
+  }
+}

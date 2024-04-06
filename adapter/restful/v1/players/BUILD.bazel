@@ -1,0 +1,22 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "players",
+    srcs = [
+        "api.go",
+        "delete.go",
+        "get_id.go",
+        "get_list.go",
+        "post.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/adapter/restful/v1/players",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/match/biz",
+        "//entity/domain/match/model",
+        "//pkg/contextx",
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_google_uuid//:uuid",
+    ],
+)

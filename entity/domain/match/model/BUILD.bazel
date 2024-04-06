@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "model",
+    srcs = [
+        "pair.go",
+        "profile.go",
+        "user.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/entity/domain/match/model",
+    visibility = ["//visibility:public"],
+)

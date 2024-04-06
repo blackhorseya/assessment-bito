@@ -1,0 +1,39 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "impl.go",
+        "wire.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/app/domain/match/biz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/match/agg",
+        "//entity/domain/match/biz",
+        "//entity/domain/match/model",
+        "//entity/domain/match/repo",
+        "//pkg/contextx",
+        "@com_github_google_wire//:wire",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_test(
+    name = "biz_test",
+    srcs = [
+        "impl_memory_test.go",
+        "impl_test.go",
+    ],
+    embed = [":biz"],
+    deps = [
+        "//app/domain/match/repo/player",
+        "//entity/domain/match/agg",
+        "//entity/domain/match/biz",
+        "//entity/domain/match/model",
+        "//entity/domain/match/repo",
+        "//pkg/contextx",
+        "@com_github_stretchr_testify//suite",
+        "@org_uber_go_mock//gomock",
+    ],
+)

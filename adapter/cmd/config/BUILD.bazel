@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = [
+        "config.go",
+        "print.go",
+    ],
+    importpath = "github.com/blackhorseya/assessment-bito/adapter/cmd/config",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

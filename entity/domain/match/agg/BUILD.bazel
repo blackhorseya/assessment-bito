@@ -1,0 +1,16 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "agg",
+    srcs = ["player.go"],
+    importpath = "github.com/blackhorseya/assessment-bito/entity/domain/match/agg",
+    visibility = ["//visibility:public"],
+    deps = ["//entity/domain/match/model"],
+)
+
+go_test(
+    name = "agg_test",
+    srcs = ["player_test.go"],
+    embed = [":agg"],
+    deps = ["//entity/domain/match/model"],
+)

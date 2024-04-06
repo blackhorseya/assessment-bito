@@ -1,0 +1,445 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Bito api swagger",
+        "title": "Bito API",
+        "contact": {
+            "name": "Sean Zheng",
+            "url": "https://blog.seancheng.space",
+            "email": "blackhorseya@gmail.com"
+        },
+        "version": "0.1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/v1/pairs": {
+            "post": {
+                "description": "Create pair",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pairs"
+                ],
+                "summary": "Create pair",
+                "parameters": [
+                    {
+                        "description": "pair",
+                        "name": "pair",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pairs.CreatePairPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Pair"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/players": {
+            "get": {
+                "description": "List players",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "players"
+                ],
+                "summary": "List players",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/agg.Player"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "headers": {
+                            "X-Total-Count": {
+                                "type": "string",
+                                "description": "total player count"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "add player and match.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "players"
+                ],
+                "summary": "Add player and match.",
+                "parameters": [
+                    {
+                        "description": "player",
+                        "name": "player",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/players.AddPlayerAndMatchPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/agg.Player"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/players/{id}": {
+            "get": {
+                "description": "Query single people",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "players"
+                ],
+                "summary": "Query single people",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "player id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "name": "n",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/agg.Player"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove single person",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "players"
+                ],
+                "summary": "Remove single person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "player id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "agg.Player": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nums_of_wanted_dates": {
+                    "type": "integer"
+                },
+                "pairs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Pair"
+                    }
+                },
+                "profile": {
+                    "$ref": "#/definitions/model.Profile"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Gender": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "GenderMale",
+                "GenderFemale",
+                "GenderOther"
+            ]
+        },
+        "model.Pair": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "left": {
+                    "$ref": "#/definitions/model.User"
+                },
+                "right": {
+                    "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "model.Profile": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "$ref": "#/definitions/model.Gender"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "profile": {
+                    "$ref": "#/definitions/model.Profile"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "pairs.CreatePairPayload": {
+            "type": "object",
+            "properties": {
+                "left_id": {
+                    "type": "string"
+                },
+                "right_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "players.AddPlayerAndMatchPayload": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "$ref": "#/definitions/model.Gender"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nums_of_wanted_dates": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
