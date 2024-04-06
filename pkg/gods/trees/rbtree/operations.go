@@ -34,3 +34,14 @@ func (t *RBTree) Delete(item Item) Item {
 		Item:   item,
 	}).Item
 }
+
+// Min returns the smallest item in the tree.
+func (t *RBTree) Min() Item {
+	x := t.min(t.root)
+
+	if x == t.NIL {
+		return nil
+	}
+
+	return x.Item
+}
