@@ -2,13 +2,21 @@ load("@rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "rbtree",
-    srcs = ["rbtree.go"],
+    srcs = [
+        "iterator.go",
+        "operations.go",
+        "rbtree.go",
+        "util.go",
+    ],
     importpath = "github.com/blackhorseya/assessment-bito/pkg/gods/trees/rbtree",
     visibility = ["//visibility:public"],
 )
 
 go_test(
     name = "rbtree_test",
-    srcs = ["rbtree_test.go"],
+    srcs = [
+        "iterator_test.go",
+        "rbtree_test.go",
+    ],
     embed = [":rbtree"],
 )
