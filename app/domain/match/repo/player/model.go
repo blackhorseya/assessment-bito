@@ -5,6 +5,7 @@ import (
 
 	"github.com/blackhorseya/assessment-bito/entity/domain/match/agg"
 	"github.com/blackhorseya/assessment-bito/entity/domain/match/model"
+	"github.com/blackhorseya/assessment-bito/pkg/gods/trees/rbtree"
 )
 
 type playerDTO struct {
@@ -29,6 +30,10 @@ func newPlayerDTO(v *agg.Player) *playerDTO {
 		CreatedAt:         v.CreatedAt,
 		UpdatedAt:         v.UpdatedAt,
 	}
+}
+
+func (x *playerDTO) Less(than rbtree.Item) bool {
+	return x.Height < than.(*playerDTO).Height
 }
 
 // ToAgg is to convert playerDTO to agg.Player.
