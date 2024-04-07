@@ -33,7 +33,7 @@ func newPlayerDTO(v *agg.Player) *playerDTO {
 }
 
 func (x *playerDTO) Less(than rbtree.Item) bool {
-	return x.Height <= than.(*playerDTO).Height
+	return x.Height < than.(*playerDTO).Height
 }
 
 // ToAgg is to convert playerDTO to agg.Player.
