@@ -51,3 +51,17 @@ graph TD
         end
     end
 ```
+
+## Time Complexity
+
+### Solution Map
+
+- AddSinglePersonAndMatch: O(n)
+- RemoveSinglePerson: O(1)
+- QuerySinglePeople: O(n)
+
+### Solution RBTree
+
+- AddSinglePersonAndMatch: O(log n)
+- RemoveSinglePerson: O(log n)
+- QuerySinglePeople: O(log n)
