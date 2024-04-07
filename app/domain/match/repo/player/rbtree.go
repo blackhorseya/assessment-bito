@@ -118,24 +118,16 @@ func (i *rbtreeImpl) ListPlayers(
 
 	if condition.Height == 0 {
 		for _, player := range i.players {
-			if condition.Gender != model.GenderUnspecified && condition.Gender != player.Gender {
-				continue
-			}
-
-			if condition.NumsOfWantedDates > 0 && !(player.NumsOfWantedDates >= uint(condition.NumsOfWantedDates)) {
-				continue
-			}
-
-			if condition.NumsOfWantedDates < 0 && !(player.NumsOfWantedDates < uint(-condition.NumsOfWantedDates)) {
-				continue
-			}
-
 			players = append(players, player.ToAgg())
 		}
 	}
 
 	var ret []*agg.Player
 	for _, player := range players {
+		if condition.Gender != model.GenderUnspecified && condition.Gender != player.Profile.Gender {
+			continue
+		}
+
 		if condition.NumsOfWantedDates > 0 && !(player.NumsOfWantedDates >= uint(condition.NumsOfWantedDates)) {
 			continue
 		}
