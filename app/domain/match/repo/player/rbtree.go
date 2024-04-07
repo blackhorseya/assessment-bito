@@ -16,15 +16,18 @@ type rbtreeImpl struct {
 	sync.RWMutex
 	players map[string]*playerDTO
 	pairs   map[string]*pairDTO
-	rbtree  *rbtree.RBTree
+	men     *rbtree.RBTree
+	women   *rbtree.RBTree
 }
 
 // NewPlayerRepoWithRBTree is to create a new player repo with rbtreeImpl.
 func NewPlayerRepoWithRBTree() repo.IPlayerRepo {
 	return &rbtreeImpl{
+		RWMutex: sync.RWMutex{},
 		players: make(map[string]*playerDTO),
 		pairs:   make(map[string]*pairDTO),
-		rbtree:  rbtree.New(),
+		men:     rbtree.New(),
+		women:   rbtree.New(),
 	}
 }
 
@@ -58,7 +61,11 @@ func (i *rbtreeImpl) JoinPlayer(ctx contextx.Contextx, player *agg.Player) (err 
 
 	i.players[created.ID] = created
 
-	i.rbtree.Insert(created)
+	if player.Profile.Gender == model.GenderMale {
+		i.men.Insert(created)
+	} else if player.Profile.Gender == model.GenderFemale {
+		i.women.Insert(created)
+	}
 
 	return nil
 }
@@ -71,7 +78,12 @@ func (i *rbtreeImpl) LeavePlayer(ctx contextx.Contextx, player *agg.Player) (err
 	if !ok {
 		return errPlayerNotFound
 	}
-	i.rbtree.Delete(got)
+
+	if player.Profile.Gender == model.GenderMale {
+		i.men.Delete(got)
+	} else if player.Profile.Gender == model.GenderFemale {
+		i.women.Delete(got)
+	}
 
 	delete(i.players, got.ID)
 
@@ -85,39 +97,54 @@ func (i *rbtreeImpl) ListPlayers(
 	i.RLock()
 	defer i.RUnlock()
 
-	var ret []*agg.Player
-	filter := func(item rbtree.Item) bool {
+	var players []*agg.Player
+	add := func(item rbtree.Item) bool {
 		player, ok := item.(*playerDTO)
 		if !ok {
 			return false
 		}
 
-		if condition.Gender != model.GenderUnspecified && condition.Gender != player.Gender {
-			return false
-		}
-
-		if condition.NumsOfWantedDates > 0 && !(player.NumsOfWantedDates >= uint(condition.NumsOfWantedDates)) {
-			return false
-		}
-
-		if condition.NumsOfWantedDates < 0 && !(player.NumsOfWantedDates < uint(-condition.NumsOfWantedDates)) {
-			return false
-		}
-
-		ret = append(ret, player.ToAgg())
+		players = append(players, player.ToAgg())
 		return true
 	}
 
 	if condition.Height < 0 {
-		i.rbtree.Descend(&playerDTO{Height: uint(-condition.Height)}, filter)
+		i.women.Descend(&playerDTO{Height: uint(-condition.Height)}, add)
 	}
 
 	if condition.Height > 0 {
-		i.rbtree.Ascend(&playerDTO{Height: uint(condition.Height)}, filter)
+		i.men.Ascend(&playerDTO{Height: uint(condition.Height)}, add)
 	}
 
 	if condition.Height == 0 {
-		i.rbtree.Ascend(&playerDTO{Height: 0}, filter)
+		for _, player := range i.players {
+			if condition.Gender != model.GenderUnspecified && condition.Gender != player.Gender {
+				continue
+			}
+
+			if condition.NumsOfWantedDates > 0 && !(player.NumsOfWantedDates >= uint(condition.NumsOfWantedDates)) {
+				continue
+			}
+
+			if condition.NumsOfWantedDates < 0 && !(player.NumsOfWantedDates < uint(-condition.NumsOfWantedDates)) {
+				continue
+			}
+
+			players = append(players, player.ToAgg())
+		}
+	}
+
+	var ret []*agg.Player
+	for _, player := range players {
+		if condition.NumsOfWantedDates > 0 && !(player.NumsOfWantedDates >= uint(condition.NumsOfWantedDates)) {
+			continue
+		}
+
+		if condition.NumsOfWantedDates < 0 && !(player.NumsOfWantedDates < uint(-condition.NumsOfWantedDates)) {
+			continue
+		}
+
+		ret = append(ret, player)
 	}
 
 	return ret, len(ret), nil
