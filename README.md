@@ -17,3 +17,7 @@ docker build -t assessment-bito:latest .
 ```shell
 docker run -it --rm -p 30000:30000 assessment-bito:latest start api
 ```
+
+## Todo List
+
+- [x] add unit test
