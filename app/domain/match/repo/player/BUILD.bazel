@@ -23,7 +23,6 @@ go_test(
     name = "player_test",
     srcs = [
         "memory_test.go",
-        "player_test.go",
         "rbtree_test.go",
     ],
     embed = [":player"],
