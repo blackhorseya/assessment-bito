@@ -2,7 +2,7 @@
 
 [![Go](https://github.com/blackhorseya/assessment-bito/actions/workflows/go.yaml/badge.svg)](https://github.com/blackhorseya/assessment-bito/actions/workflows/go.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=blackhorseya_assessment-bito&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=blackhorseya_assessment-bito)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=blackhorseya_assessment-bito&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=blackhorseya_assessment-bito)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=blackhorseya_assessment-bito&metric=coverage)](https://sonarcloud.io/summary/new_code?id=blackhorseya_assessment-bito)
 ![GitHub Release](https://img.shields.io/github/v/release/blackhorseya/assessment-bito)
 
 ## Introduction
