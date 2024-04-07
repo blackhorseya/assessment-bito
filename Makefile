@@ -21,6 +21,10 @@ clean:  ## remove artifacts
 lint: ## run golangci-lint
 	@golangci-lint run ./...
 
+.PHONY: cover
+cover: ## run coverage
+	@go test -json -coverprofile=cover.out ./... > result.json
+
 .PHONY: gazelle
 gazelle: ## run gazelle with bazel
 	@bazel run //:gazelle
