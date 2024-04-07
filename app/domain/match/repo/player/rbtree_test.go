@@ -177,7 +177,7 @@ func (s *suiteRBTree) Test_memory_ListPlayers() {
 			name: "ok",
 			args: args{condition: repo.ListPlayersCondition{
 				Gender:            model.GenderMale,
-				Height:            170,
+				Height:            175,
 				NumsOfWantedDates: 1,
 				Limit:             0,
 				Offset:            0,
