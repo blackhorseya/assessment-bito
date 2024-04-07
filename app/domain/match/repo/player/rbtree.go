@@ -116,6 +116,10 @@ func (i *rbtreeImpl) ListPlayers(
 		i.rbtree.Ascend(&playerDTO{Height: uint(condition.Height)}, filter)
 	}
 
+	if condition.Height == 0 {
+		i.rbtree.Ascend(&playerDTO{Height: 0}, filter)
+	}
+
 	return ret, len(ret), nil
 }
 

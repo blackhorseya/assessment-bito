@@ -21,7 +21,7 @@ import (
 
 // Injectors from wire.go:
 
-func New(v *viper.Viper) (adapterx.Servicer, error) {
+func NewMemory(v *viper.Viper) (adapterx.Servicer, error) {
 	server, err := httpx.NewServer()
 	if err != nil {
 		return nil, err
@@ -32,17 +32,17 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	return servicer, nil
 }
 
-func NewRestful() (adapterx.Restful, error) {
+func NewRBTree(v *viper.Viper) (adapterx.Servicer, error) {
 	server, err := httpx.NewServer()
 	if err != nil {
 		return nil, err
 	}
-	iPlayerRepo := player.NewPlayerRepoWithMemory()
+	iPlayerRepo := player.NewPlayerRepoWithRBTree()
 	iMatchBiz := biz.NewMatchBiz(iPlayerRepo)
-	restful := newRestful(server, iMatchBiz)
-	return restful, nil
+	servicer := newService(server, iMatchBiz)
+	return servicer, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(httpx.NewServer, biz.ProvideMatchBiz, player.NewPlayerRepoWithMemory)
+var providerSet = wire.NewSet(httpx.NewServer, biz.ProvideMatchBiz)

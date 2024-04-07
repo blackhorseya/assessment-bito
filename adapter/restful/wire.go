@@ -16,13 +16,12 @@ import (
 var providerSet = wire.NewSet(
 	httpx.NewServer,
 	biz.ProvideMatchBiz,
-	player.NewPlayerRepoWithMemory,
 )
 
-func New(v *viper.Viper) (adapterx.Servicer, error) {
-	panic(wire.Build(providerSet, newService))
+func NewMemory(v *viper.Viper) (adapterx.Servicer, error) {
+	panic(wire.Build(providerSet, newService, player.NewPlayerRepoWithMemory))
 }
 
-func NewRestful() (adapterx.Restful, error) {
-	panic(wire.Build(providerSet, newRestful))
+func NewRBTree(v *viper.Viper) (adapterx.Servicer, error) {
+	panic(wire.Build(providerSet, newService, player.NewPlayerRepoWithRBTree))
 }

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"github.com/blackhorseya/assessment-bito/adapter/restful"
-	"github.com/blackhorseya/assessment-bito/pkg/cmdx"
 	"github.com/spf13/cobra"
 )
 
@@ -13,10 +12,7 @@ var startCmd = &cobra.Command{
 }
 
 func init() {
-	apiCmd := cmdx.NewServiceCmd("api", "start a restful service", restful.New)
-	apiCmd.Flags().String("gods", "rbtree", "gods type(memory, rbtree)")
-
-	startCmd.AddCommand(apiCmd)
+	startCmd.AddCommand(restful.NewCmd())
 
 	rootCmd.AddCommand(startCmd)
 
