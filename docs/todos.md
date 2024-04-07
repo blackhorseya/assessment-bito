@@ -18,4 +18,4 @@
 - [x] API documentation
 - [x] How to use
 - [x] Project structure documentation
-- [ ] System design documentation
+- [x] System design documentation
