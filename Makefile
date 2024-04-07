@@ -13,7 +13,7 @@ version: ## show version
 
 .PHONY: clean
 clean:  ## remove artifacts
-	@rm -rf coverage.txt profile.out ./bin ./deployments/charts/*.tgz
+	@rm -rf cover.out result.json ./bin ./deployments/charts/*.tgz
 	@echo Successfuly removed artifacts
 
 ## go
