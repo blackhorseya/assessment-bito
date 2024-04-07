@@ -38,3 +38,16 @@
 `MatchingService`是Tinder匹配系統中的一個關鍵領域服務，它將領域模型（如單身人士的屬性和需求）與核心業務邏輯（匹配規則）緊密結合。透
 
 ## System Architecture
+
+```mermaid
+graph TD
+    subgraph "Server"
+        A[RESTful API] --> B[Matching Biz]
+        B --> C
+        B --> D
+        subgraph Repository
+            C[Player Repository With Map]
+            D[Player Repository With RBTree]
+        end
+    end
+```
