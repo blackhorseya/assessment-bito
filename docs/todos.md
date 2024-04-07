@@ -16,7 +16,7 @@
 ## Documentation
 
 - [x] API documentation
-- [ ] How to use
+- [x] How to use
 - [ ] Project structure documentation
 - [ ] System design documentation
 - [ ] Time complexity of APIs
