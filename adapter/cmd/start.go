@@ -13,7 +13,10 @@ var startCmd = &cobra.Command{
 }
 
 func init() {
-	startCmd.AddCommand(cmdx.NewServiceCmd("api", "start a restful service", restful.New))
+	apiCmd := cmdx.NewServiceCmd("api", "start a restful service", restful.New)
+	apiCmd.Flags().String("gods", "rbtree", "gods type(memory, rbtree)")
+
+	startCmd.AddCommand(apiCmd)
 
 	rootCmd.AddCommand(startCmd)
 
