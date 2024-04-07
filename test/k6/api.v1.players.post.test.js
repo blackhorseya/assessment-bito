@@ -2,8 +2,23 @@ import http from 'k6/http';
 import {check, group} from 'k6';
 
 export const options = {
-  vus: 1,
-  iterations: 1,
+  scenarios: {
+    my_scenario1: {
+      executor: 'constant-arrival-rate',
+      duration: '30s', // total duration
+      preAllocatedVUs: 50, // to allocate runtime resources
+
+      rate: 50, // number of constant iterations given `timeUnit`
+      timeUnit: '1s',
+    },
+  },
+
+  ext: {
+    loadimpact: {
+      projectID: 3690299,
+      name: 'assessment-bito',
+    },
+  },
 };
 
 // Create a random string of given length
@@ -30,7 +45,7 @@ export default function() {
       name: 'AddPlayerAndMatch then ok',
       payload: {
         age: 20,
-        gender: 0,
+        gender: 1,
         height: 180,
         name: randomString(10),
         nums_of_wanted_dates: 3,
@@ -41,7 +56,7 @@ export default function() {
       name: 'AddPlayerAndMatch invalid age',
       payload: {
         age: -1,
-        gender: 0,
+        gender: 1,
         height: 180,
         name: randomString(10),
         nums_of_wanted_dates: 3,
@@ -52,7 +67,7 @@ export default function() {
       name: 'AddPlayerAndMatch invalid height',
       payload: {
         age: 20,
-        gender: 0,
+        gender: 1,
         height: -180,
         name: randomString(10),
         nums_of_wanted_dates: 3,
@@ -63,7 +78,7 @@ export default function() {
       name: 'AddPlayerAndMatch invalid nums_of_wanted_dates',
       payload: {
         age: 20,
-        gender: 0,
+        gender: 1,
         height: 180,
         name: randomString(10),
         nums_of_wanted_dates: -3,
