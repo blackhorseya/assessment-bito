@@ -120,6 +120,29 @@ func (i *rbtreeImpl) ListPlayers(
 }
 
 func (i *rbtreeImpl) MatchedPair(ctx contextx.Contextx, left, right *agg.Player, pair *model.Pair) (err error) {
-	// todo: 2024/4/5|sean|implement me
-	panic("implement me")
+	i.Lock()
+	defer i.Unlock()
+
+	now := time.Now()
+	left.UpdatedAt = now
+	right.UpdatedAt = now
+
+	leftDTO, ok := i.players[left.ID]
+	if ok {
+		leftDTO.NumsOfWantedDates = left.NumsOfWantedDates
+		leftDTO.UpdatedAt = left.UpdatedAt
+	}
+
+	rightDTO, ok := i.players[right.ID]
+	if ok {
+		rightDTO.NumsOfWantedDates = right.NumsOfWantedDates
+		rightDTO.UpdatedAt = right.UpdatedAt
+	}
+
+	pair.ID = uuid.New().String()
+	pair.CreatedAt = now
+	newPair := newPairDTO(pair)
+	i.pairs[pair.ID] = newPair
+
+	return nil
 }
