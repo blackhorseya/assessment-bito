@@ -56,7 +56,7 @@ export default function() {
       if (check(resp,
           {'create a player': (r) => r.status === 201})) {
         player1.id = resp.json().data.id;
-        console.log(`Player created successfully, ID: ${player1.id}`);
+        console.debug(`Player created successfully, ID: ${player1.id}`);
       } else {
         console.error(
             `Failed to add player and match: ${resp.status} ${resp.body}`);
@@ -68,7 +68,7 @@ export default function() {
 
       if (check(resp,
           {'list players': (r) => r.status === 200})) {
-        console.log(
+        console.debug(
             `Players retrieved successfully: ${resp.headers['X-Total-Count']}`);
       } else {
         console.error(
@@ -81,7 +81,7 @@ export default function() {
 
       if (check(resp,
           {'get player by id': (r) => r.status === 200})) {
-        console.log(`Player retrieved successfully: ${resp.json().data.id}`);
+        console.debug(`Player retrieved successfully: ${resp.json().data.id}`);
       } else {
         console.error(
             `Failed to retrieve player: ${resp.status} ${resp.body}`);
@@ -93,7 +93,7 @@ export default function() {
 
       if (check(resp,
           {'delete player by id': (r) => r.status === 204})) {
-        console.log(`Player deleted successfully: ${player1.id}`);
+        console.debug(`Player deleted successfully: ${player1.id}`);
       } else {
         console.error(
             `Failed to delete player: ${resp.status} ${resp.body}`);
@@ -129,7 +129,7 @@ export default function() {
         if (check(resp,
             {'create a player': (r) => r.status === 201})) {
           player.id = resp.json().data.id;
-          console.log(`Player created successfully, ID: ${player.id}`);
+          console.debug(`Player created successfully, ID: ${player.id}`);
         } else {
           console.error(
               `Failed to add player and match: ${resp.status} ${resp.body}`);
@@ -147,7 +147,7 @@ export default function() {
 
       if (check(resp,
           {'create a pair': (r) => r.status === 201})) {
-        console.log(`Pair created successfully: ${resp.body}`);
+        console.debug(`Pair created successfully: ${resp.body}`);
       } else {
         console.error(
             `Failed to add pair: ${resp.status} ${resp.body}`);

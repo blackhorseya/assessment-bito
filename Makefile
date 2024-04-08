@@ -39,7 +39,11 @@ test: ## test go binary
 
 .PHONY: test-e2e
 test-e2e: ## test e2e
-	@k6 run ./test/k6/api.e2e.js
+	@k6 run --vus=1 --iterations=1 ./test/k6/api.test.js
+
+.PHONY: test-smoke
+test-smoke: ## test smoke
+	@k6 run --vus=5 --duration='30s' ./test/k6/api.test.js
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger
