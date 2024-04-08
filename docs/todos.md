@@ -11,7 +11,7 @@
 - [x] Unit tests
 - [x] Integration tests
 - [x] End-to-end tests
-- [ ] Performance tests
+- [x] Performance tests
 
 ## Documentation
 
