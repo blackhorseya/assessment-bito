@@ -56,3 +56,7 @@ This repository contains the code for the Bito assessment.
    ```shell
    docker run -it --rm -p 30000:30000 ghcr.io/blackhorseya/assessment-bito:latest start api
    ```
+   
+## Test Report
+
+- [Smoke Test](https://blackhorseya.grafana.net/dashboard/snapshot/2gmYToGyDQVGBKgNsxdJznafZoVZXCWe)
