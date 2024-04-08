@@ -6,9 +6,6 @@ import {
 } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
 
 export const options = {
-  vus: 1,
-  iterations: 1,
-
   // The following section contains configuration options for execution of this
   // test script in Grafana Cloud.
   //
