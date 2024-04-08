@@ -24,7 +24,7 @@ type ListPlayersQuery struct {
 // @Success 200 {object} response.Response{data=[]agg.Player}
 // @Failure 400,404 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Header 200 {string} X-Total-Count "total player count"
+// @Header 200 {string} x-total-count "total player count"
 // @Router /v1/players [get]
 func (i *impl) ListPlayers(c *gin.Context) {
 	ctx, err := contextx.FromGin(c)
@@ -49,6 +49,6 @@ func (i *impl) ListPlayers(c *gin.Context) {
 		return
 	}
 
-	c.Header("X-Total-Count", strconv.Itoa(total))
+	c.Header("x-total-count", strconv.Itoa(total))
 	c.JSON(http.StatusOK, response.OK.WithData(players))
 }

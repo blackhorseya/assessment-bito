@@ -22,13 +22,17 @@ definitions:
     - 0
     - 1
     - 2
+    - 3
     type: integer
     x-enum-varnames:
+    - GenderUnspecified
     - GenderMale
     - GenderFemale
     - GenderOther
   model.Pair:
     properties:
+      created_at:
+        type: string
       id:
         type: string
       left:
@@ -145,7 +149,7 @@ paths:
         "200":
           description: OK
           headers:
-            X-Total-Count:
+            x-total-count:
               description: total player count
               type: string
           schema:

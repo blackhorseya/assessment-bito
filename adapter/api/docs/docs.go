@@ -118,7 +118,7 @@ const docTemplate = `{
                             ]
                         },
                         "headers": {
-                            "X-Total-Count": {
+                            "x-total-count": {
                                 "type": "string",
                                 "description": "total player count"
                             }
@@ -349,9 +349,11 @@ const docTemplate = `{
             "enum": [
                 0,
                 1,
-                2
+                2,
+                3
             ],
             "x-enum-varnames": [
+                "GenderUnspecified",
                 "GenderMale",
                 "GenderFemale",
                 "GenderOther"
@@ -360,6 +362,9 @@ const docTemplate = `{
         "model.Pair": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
