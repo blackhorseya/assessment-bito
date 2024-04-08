@@ -39,8 +39,7 @@ test: ## test go binary
 
 .PHONY: test-e2e
 test-e2e: ## test e2e
-	@k6 run ./test/k6/api.v1.players.post.test.js
-	@k6 run ./test/k6/api.v1.players.delete.test.js
+	@k6 run ./test/k6/api.test.js
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger
