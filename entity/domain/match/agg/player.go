@@ -83,24 +83,3 @@ func (x *Player) WantHeight() int {
 
 	return 0
 }
-
-// Copy is to copy the player.
-func (x *Player) Copy() *Player {
-	return &Player{
-		User: model.User{
-			ID: x.ID,
-			Profile: model.Profile{
-				Name:   x.Profile.Name,
-				Age:    x.Profile.Age,
-				Gender: x.Profile.Gender,
-				Height: x.Profile.Height,
-			},
-			CreatedAt: x.CreatedAt,
-			UpdatedAt: x.UpdatedAt,
-		},
-		NumsOfWantedDates: x.NumsOfWantedDates,
-		Pairs:             nil,
-		PotentialPairs:    nil,
-		MatchedPairs:      nil,
-	}
-}
